@@ -1,0 +1,25 @@
+{
+  "name": "angular-modest",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/karma/bin/karma start"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/christian-fei/angular-modest.git"
+  },
+  "author": "Christian Fei",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/christian-fei/angular-modest/issues"
+  },
+  "homepage": "https://github.com/christian-fei/angular-modest",
+  "devDependencies": {
+    "karma": "^0.12.31",
+    "karma-mocha": "^0.1.10",
+    "karma-phantomjs-launcher": "^0.1.4",
+    "mocha": "^2.1.0"
+  }
+}
