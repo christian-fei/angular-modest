@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "./node_modules/karma/bin/karma start --no-auth-watch --single-run"
+    "test": "./node_modules/karma/bin/karma start --no-auth-watch --single-run",
+    "watch-tests": "./node_modules/karma/bin/karma start"
   },
   "repository": {
     "type": "git",
@@ -20,6 +21,7 @@
     "chai": "^1.10.0",
     "karma": "^0.12.31",
     "karma-chai": "^0.1.0",
+    "karma-coverage": "^0.2.7",
     "karma-mocha": "^0.1.10",
     "karma-mocha-reporter": "^0.3.1",
     "karma-phantomjs-launcher": "^0.1.4",
