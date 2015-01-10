@@ -1,6 +1,6 @@
 !(function(angular){
   'use strict';
-  var modest = angular.module('modest',['modestHelpers']);
+  var modest = angular.module('modest',['modest.helpers']);
 
   modest.factory('Resource',['$http','ResourceHelpers',function($http,ResourceHelpers){
     var Resource = function(url,paramDefaults,actions,nestedResources){

@@ -1,6 +1,6 @@
 !(function(angular){
   'use strict';
-  var modestHelpers = angular.module('modestHelpers',[]);
+  var modestHelpers = angular.module('modest.helpers',[]);
 
   modestHelpers.service('ResourceHelpers',[function(){
     var self = this;

@@ -7,7 +7,7 @@ describe('sample', function() {
   var userAndBooksResourceUrl = '/users/:userId/books/:bookId';
   var user1Book1ResourceUrl = '/users/1/books/1';
 
-  beforeEach(module('modestHelpers'));
+  beforeEach(module('modest.helpers'));
 
   beforeEach(inject(function(_ResourceHelpers_){
     ResourceHelpers = _ResourceHelpers_;
