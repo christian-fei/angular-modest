@@ -3,6 +3,12 @@ angular-modest
 
 [![Circle CI](https://circleci.com/gh/christian-fei/angular-modest.svg)](https://circleci.com/gh/christian-fei/angular-modest)
 
+Modest Angular module for handling nested REST resources.
+
+With great 'inspiration' from:
+- [Angular Resource](https://github.com/angular/bower-angular-resource)
+- [Angular nested resource](https://github.com/roypeled/angular-nested-resource)
+
 
 
 # How to contribute
