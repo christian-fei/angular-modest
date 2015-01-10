@@ -15,7 +15,7 @@
 
       self.get = function(params){
         var requestUrl = ResourceHelpers.parameterize(_url,params);
-        $http.get(requestUrl);
+        return $http.get(requestUrl);
       };
     };
 
