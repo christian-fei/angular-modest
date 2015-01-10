@@ -30,6 +30,10 @@
         }
       });
 
+      if( 0 === paramsToReplace.length ){
+        return url.substring(0,url.indexOf(':'));
+      }
+
       var limitedUrl = '';
 
       var prevParamToReplace = '';
