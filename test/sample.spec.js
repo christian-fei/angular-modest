@@ -1,18 +1,27 @@
 describe('sample', function() {
-  var Say;
+  var Resource;
+
+  /* helpers */
+  var userResourceUrl = '/user/:userId';
+  var user1ResourceUrl = '/user/1';
 
   beforeEach(module('modest'));
 
   beforeEach(function() {
-    inject(function(_Say_){
-      Say = _Say_;
-    })
+    inject(function(_Resource_){
+      Resource = _Resource_;
+    });
+  });
+  
+
+  it('should save the resourceUrl with which the Resource has been instanciated', function () {
+    var resource = new Resource( userResourceUrl );
+    expect( resource.getUrl() ).to.equal( userResourceUrl );
   });
 
-  it('should say Grazie', function () {
-    expect(Say.thanks('it')).to.equal('Grazie');
+  it('should parameterize the resourceUrl if default parameters have been passed in', function () {
+    var resource = new Resource( userResourceUrl, {userId:1} );
+    expect( resource.getUrl() ).to.equal( user1ResourceUrl );
   });
-  it('should say Thanks', function () {
-    expect(Say.thanks()).to.equal('Thanks');
-  });
+
 });

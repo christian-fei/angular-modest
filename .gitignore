@@ -1,3 +1,5 @@
 bower_components
 node_modules
 angular-modest.sublime-workspace
+angular-nested-resource.js
+angular-resource.js
