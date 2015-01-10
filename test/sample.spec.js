@@ -17,11 +17,12 @@ describe('sample', function() {
   it('should save the resourceUrl with which the Resource has been instanciated', function () {
     var resource = new Resource( userResourceUrl );
     expect( resource.getUrl() ).to.equal( userResourceUrl );
+    resource = new Resource( userResourceUrl,{} );
+    expect( resource.getUrl() ).to.equal( userResourceUrl );
   });
 
   it('should parameterize the resourceUrl if default parameters have been passed in', function () {
     var resource = new Resource( userResourceUrl, {userId:1} );
     expect( resource.getUrl() ).to.equal( user1ResourceUrl );
   });
-
 });
