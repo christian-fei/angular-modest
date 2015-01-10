@@ -47,6 +47,8 @@ module.exports = function(config) {
         type: 'cobertura',
         subdir: '.',
         file: 'cobertura.txt'
+      },{
+        type: 'html'
       }]
     },
 
