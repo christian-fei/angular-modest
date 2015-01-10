@@ -21,15 +21,15 @@ describe('sample', function() {
 
   it('should save the resourceUrl with which the Resource has been instanciated', function () {
     var user = new Resource( userResourceUrl );
-    expect( user.getUrl() ).to.equal( userResourceUrl );
+    expect( user.getResourceUrl() ).to.equal( userResourceUrl );
 
     user = new Resource( userResourceUrl,{} );
-    expect( user.getUrl() ).to.equal( userResourceUrl );
+    expect( user.getResourceUrl() ).to.equal( userResourceUrl );
   });
 
   it('should parameterize the resourceUrl if default parameters have been passed in', function () {
     var user = new Resource( userResourceUrl, {userId:1} );
-    expect( user.getUrl() ).to.equal( user1ResourceUrl );
+    expect( user.getResourceUrl() ).to.equal( user1ResourceUrl );
   });
 
   it('should get a single resource when passed in the id', function () {
@@ -43,8 +43,14 @@ describe('sample', function() {
     $httpBackend.expectGET(/\/users\/1\/?$/).respond(200,dummyUser)
     var user = new Resource( userAndBooksResourceUrl, {} );    
     user.get({userId:1});
-    $httpBackend.flush();    
+    $httpBackend.flush();
   });
 
+  it('should get the nested resource until the defined parameters', function () {
+    $httpBackend.expectGET(/\/users\/1\/books\/1\/?$/).respond(200,dummyUser)
+    var user = new Resource( userAndBooksResourceUrl, {} );
+    user.get({userId:1,bookId:1});
+    $httpBackend.flush();
+  });
 
 });
