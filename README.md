@@ -1,7 +1,7 @@
 angular-modest
 ==============
 
-[![Circle CI](https://circleci.com/gh/christian-fei/angular-modest.svg)](https://circleci.com/gh/christian-fei/angular-modest)
+[![Circle CI](https://circleci.com/gh/christian-fei/angular-modest.svg?style=shield)](https://circleci.com/gh/christian-fei/angular-modest)
 ![Coverage](https://rawgit.com/christian-fei/angular-modest/master/coverage.svg)
 
 Modest Angular module for handling nested REST resources.
