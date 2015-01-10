@@ -7,16 +7,15 @@ describe('sample', function() {
 
   beforeEach(module('modest'));
 
-  beforeEach(function() {
-    inject(function(_Resource_){
-      Resource = _Resource_;
-    });
-  });
+  beforeEach(inject(function(_Resource_){
+    Resource = _Resource_;
+  }));
   
 
   it('should save the resourceUrl with which the Resource has been instanciated', function () {
     var resource = new Resource( userResourceUrl );
     expect( resource.getUrl() ).to.equal( userResourceUrl );
+
     resource = new Resource( userResourceUrl,{} );
     expect( resource.getUrl() ).to.equal( userResourceUrl );
   });
