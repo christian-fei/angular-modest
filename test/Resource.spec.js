@@ -54,4 +54,11 @@ describe('Resource', function() {
     $httpBackend.flush();
   });
 
+  it('should fallback to defaultParameters when parameters during operation are not passed in', function () {
+    $httpBackend.expectGET(user1ResourcePath).respond(200,dummyUser)
+    var user = new Resource( userAndBooksResourceUrl, {userId:1} );    
+    user.get();
+    $httpBackend.flush();    
+  });
+
 });
