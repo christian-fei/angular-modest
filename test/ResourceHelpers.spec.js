@@ -1,4 +1,4 @@
-describe('sample', function() {
+describe('ResourceHelpers', function() {
   var ResourceHelpers;
 
   /* helpers */

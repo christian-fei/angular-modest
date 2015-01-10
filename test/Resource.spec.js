@@ -1,4 +1,4 @@
-describe('sample', function() {
+describe('Resource', function() {
   var Resource;
 
   var $httpBackend;
