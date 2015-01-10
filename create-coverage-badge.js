@@ -1,9 +1,6 @@
-var coberturaBadger = require('istanbul-cobertura-badger');
-var path = require('path');
+var coberturaReport = "coverage/cobertura.txt";
+var badgeDestinationPath = process.env.PWD;
 
-var coberturaFile = "coverage/cobertura.txt";
-var destinationPath = process.env.PWD
-
-coberturaBadger(coberturaFile, destinationPath, function() {
-  console.log("Badge created at " + destinationPath + "/coverage.svg");
+require('istanbul-cobertura-badger')(coberturaReport, badgeDestinationPath, function() {
+  console.log("Badge created at " + badgeDestinationPath + "/coverage.svg");
 });
