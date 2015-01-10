@@ -5,7 +5,7 @@
   modestHelpers.service('ResourceHelpers',[function(){
     var self = this;
     self.parameterize = function(url,params){
-      if( !params || Object.keys(params).length == 0 )return url;
+      params = params || {}
       url = self.limitUrlUntilProvidedParams(url,params);
       return url.replace(/:([^/]*)/gi, function(match, group){
         return params[group] || match;
@@ -15,7 +15,9 @@
       var availableParams = url.match(/:([^/]*)/gi);
 
       if( !availableParams || availableParams.length == 0 ){
-        return url;
+        var indexOfColon = url.indexOf(':');
+        var end = indexOfColon>0 ? indexOfColon : url.length;
+        return url.substr(0,end);
       }
 
       availableParams = availableParams.map(function(p){

@@ -24,10 +24,10 @@ describe('Resource', function() {
 
   it('should save the resourceUrl with which the Resource has been instanciated', function () {
     var user = new Resource( userResourceUrl );
-    expect( user.getResourceUrl() ).to.equal( userResourceUrl );
+    expect( user.getResourceUrl() ).to.equal( usersResourceUrl );
 
-    user = new Resource( userResourceUrl,{} );
-    expect( user.getResourceUrl() ).to.equal( userResourceUrl );
+    user = new Resource( userResourceUrl, {userId:1} );
+    expect( user.getResourceUrl() ).to.equal( user1ResourceUrl );
   });
 
   it('should parameterize the resourceUrl if default parameters have been passed in', function () {
@@ -36,7 +36,7 @@ describe('Resource', function() {
   });
 
   it('should get the resource set when no parameters are passed in and no defaultParameters are set', function () {
-    $httpBackend.expectGET(usersResourceUrl).respond(200,dummyUser)
+    $httpBackend.expectGET(usersResourcePath).respond(200,dummyUser)
     var user = new Resource( usersResourceUrl, {} );    
     user.get();
     $httpBackend.flush();    

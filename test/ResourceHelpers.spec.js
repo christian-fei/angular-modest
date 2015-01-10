@@ -5,6 +5,7 @@ describe('ResourceHelpers', function() {
   var userResourceUrl = '/users/:userId';
   var usersUrl = '/users/';
   var user1ResourceUrl = '/users/1';
+  var usersResourceUrl = '/users/';
   var userAndBooksResourceUrl = '/users/:userId/books/:bookId';
   var user1Book1ResourceUrl = '/users/1/books/1';
 
@@ -21,7 +22,12 @@ describe('ResourceHelpers', function() {
 
   it('should return the unparameterized url if no parameters are passed in', function () {
     var url = ResourceHelpers.parameterize(userResourceUrl,{});
-    expect( url ).to.equal( userResourceUrl );
+    expect( url ).to.equal( usersUrl );
+  });
+
+  it('should not parameterize an url if no parameters are passed in and return the resource set', function () {
+    var url = ResourceHelpers.parameterize(userResourceUrl,{});
+    expect( url ).to.equal( usersUrl );
   });
 
   it('should return the clean url with no parameters if unexisting parameters are passed in', function () {
