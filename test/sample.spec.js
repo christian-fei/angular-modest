@@ -6,12 +6,15 @@ describe('sample', function() {
   /* helpers */
   var userResourceUrl = '/users/:userId';
   var user1ResourceUrl = '/users/1';
+  var dummyUser = { name:'Elvis', lastName:'Presley' };
 
   beforeEach(module('modest'));
 
   beforeEach(inject(function(_Resource_,_$httpBackend_){
     Resource = _Resource_;
     $httpBackend = _$httpBackend_;
+
+    $httpBackend.whenGET(/\/users\/\d\/?$/).respond(200,dummyUser);
   }));
   
 
@@ -29,13 +32,12 @@ describe('sample', function() {
   });
 
   it('should get a single resource when passed in the id', function () {
-    $httpBackend.expectGET(/\/users\/1/).respond(200,{
-      name:'Elvis',
-      lastName:'Presley'
-    })
+    $httpBackend.expectGET(/\/users\/1\/?$/).respond(200,dummyUser)
     var resource = new Resource( userResourceUrl, {} );    
     resource.get({userId:1});
 
     $httpBackend.flush();
   });
+
+
 });
