@@ -6,9 +6,7 @@
     var self = this;
     self.parameterize = function(url,params){
       if( !params || Object.keys(params).length == 0 )return url;
-      console.log( url );
       url = self.limitUrlUntilProvidedParams(url,params);
-      console.log( url );
       return url.replace(/:([^/]*)/gi, function(match, group){
         return params[group] || match;
       });
@@ -40,7 +38,6 @@
         paramToReplace = ':'+paramToReplace;
         var start = url.indexOf(prevParamToReplace)+prevParamToReplace.length;
         var end = url.indexOf(paramToReplace)+paramToReplace.length;
-        console.log( 'start,end',start,end );
         limitedUrl += url.substr(start, end);
         prevParamToReplace = paramToReplace;
       });
