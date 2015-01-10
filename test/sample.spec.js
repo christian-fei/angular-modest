@@ -5,6 +5,7 @@ describe('sample', function() {
 
   /* helpers */
   var userResourceUrl = '/users/:userId';
+  var userAndBooksResourceUrl = '/users/:userId/books/:bookId';
   var user1ResourceUrl = '/users/1';
   var dummyUser = { name:'Elvis', lastName:'Presley' };
 
@@ -19,24 +20,30 @@ describe('sample', function() {
   
 
   it('should save the resourceUrl with which the Resource has been instanciated', function () {
-    var resource = new Resource( userResourceUrl );
-    expect( resource.getUrl() ).to.equal( userResourceUrl );
+    var user = new Resource( userResourceUrl );
+    expect( user.getUrl() ).to.equal( userResourceUrl );
 
-    resource = new Resource( userResourceUrl,{} );
-    expect( resource.getUrl() ).to.equal( userResourceUrl );
+    user = new Resource( userResourceUrl,{} );
+    expect( user.getUrl() ).to.equal( userResourceUrl );
   });
 
   it('should parameterize the resourceUrl if default parameters have been passed in', function () {
-    var resource = new Resource( userResourceUrl, {userId:1} );
-    expect( resource.getUrl() ).to.equal( user1ResourceUrl );
+    var user = new Resource( userResourceUrl, {userId:1} );
+    expect( user.getUrl() ).to.equal( user1ResourceUrl );
   });
 
   it('should get a single resource when passed in the id', function () {
     $httpBackend.expectGET(/\/users\/1\/?$/).respond(200,dummyUser)
-    var resource = new Resource( userResourceUrl, {} );    
-    resource.get({userId:1});
-
+    var user = new Resource( userResourceUrl, {} );    
+    user.get({userId:1});
     $httpBackend.flush();
+  });
+
+  it('should get a single resource and not nested if only parameter for first resource is passed in', function () {
+    $httpBackend.expectGET(/\/users\/1\/?$/).respond(200,dummyUser)
+    var user = new Resource( userAndBooksResourceUrl, {} );    
+    user.get({userId:1});
+    $httpBackend.flush();    
   });
 
 

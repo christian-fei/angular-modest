@@ -12,15 +12,40 @@
         return _url;
       };
 
-      self.get = function(parameters){
-        $http.get(parameterize(_url,parameters));
+      self.get = function(params){
+        $http.get(parameterize(_url,params));
       };
 
-      function parameterize(url,parameters){
-        if( !parameters || Object.keys(parameters).length == 0 )return url;
+      function parameterize(url,params){
+        if( !params || Object.keys(params).length == 0 )return url;
+        url = limitUrlUntilProvidedParams(url,params);
         return url.replace(/:([^/]*)/gi, function(match, group){
-          return parameters[group];
+          return params[group];
         });
+      }
+      function limitUrlUntilProvidedParams(url,params){
+        var availableParams = url.match(/:([^/]*)/gi).map(function(p){
+          return p.substr(1);
+        })
+        var paramsToReplace = [];
+
+        angular.forEach(availableParams, function(availableParam){
+          if( params[availableParam] !== undefined ) {
+            paramsToReplace.push(availableParam);
+          }
+        });
+
+        var limitedUrl = '';
+
+        var prevParamToReplace = '';
+
+        angular.forEach(paramsToReplace,function(paramToReplace){
+          paramToReplace = ':'+paramToReplace;
+          limitedUrl += url.substring(url.indexOf(prevParamToReplace),url.indexOf(paramToReplace)+paramToReplace.length)
+          prevParamToReplace = paramToReplace;
+        });
+
+        return limitedUrl;
       }
     };
 
