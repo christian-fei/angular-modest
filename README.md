@@ -13,17 +13,17 @@ With great 'inspiration' from:
 
 
 
-# WIP
-
-
 
 
 
 
 # Installation
 
-TBA
+```
+bower install --save angular-modest
+```
 
+and include `angular-modest.js` as a dependency
 
 
 
