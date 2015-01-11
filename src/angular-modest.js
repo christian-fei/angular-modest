@@ -2,6 +2,9 @@
   'use strict';
   var modest = angular.module('modest',['modest.helpers']);
 
+  var $modestErr = angular.$$minErr('modest');
+
+
   modest.factory('Resource',['$http','ResourceHelpers',function($http,ResourceHelpers){
     var Resource = function(url,defaultParams,resourceName){
       var self = this;
