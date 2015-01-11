@@ -12,12 +12,10 @@
     }
     self.parameterizeUntilParams = function(url,params){
       params = params || {}
-      url = self.limitUrlUntilProvidedParams(url,params);
-      return url.replace(/:([^/]*)/gi, function(match, group){
-        return params[group] || match;
-      });
+      url = limitUrlUntilProvidedParams(url,params);
+      return self.parameterize(url, params);
     };
-    self.limitUrlUntilProvidedParams = function(url,params){
+    function limitUrlUntilProvidedParams(url,params){
       var availableParams = url.match(/:([^/]*)/gi);
 
       if( !availableParams || availableParams.length == 0 ){
@@ -39,7 +37,12 @@
       });
 
       if( 0 === paramsToReplace.length ){
-        return url.substring(0,url.indexOf(':'));
+        var indexOfColon = url.indexOf(':');
+        if( availableParams.length > 0 ){
+          url = url.substring(0, indexOfColon+availableParams[0].length+1);
+          return url.replace(new RegExp(':'+availableParams[0]), params);
+        }
+        return url.substring(0,indexOfColon);
       }
 
       var limitedUrl = '';

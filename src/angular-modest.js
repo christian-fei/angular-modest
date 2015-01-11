@@ -20,7 +20,9 @@
       };
 
       self.get = function(params){
-        params = mergeParams(params);
+        if( !angular.isString(params) && !angular.isNumber(params) ){
+          params = mergeParams(params);
+        }
         var requestUrl = ResourceHelpers.parameterizeUntilParams(_url, params);
         return $http.get(requestUrl);
       };

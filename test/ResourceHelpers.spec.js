@@ -26,7 +26,7 @@ describe('ResourceHelpers', function() {
     expect( url ).to.equal( userResourceUrl );
   });
 
-  it('should parameterize and url only until the provided parameters and cut the rest of the url', function () {
+  it('should parameterize an url only until the provided parameters and cut the rest of the url', function () {
     var url = ResourceHelpers.parameterize(userAndBooksResourceUrl,{userId:1});
     expect( url ).to.equal( user1BooksResourceUrl );    
   });
@@ -35,4 +35,10 @@ describe('ResourceHelpers', function() {
     var url = ResourceHelpers.parameterize(userAndBooksResourceUrl,{userId:1,bookId:1});
     expect( url ).to.equal( user1Book1ResourceUrl );
   });
+
+  it('should parametrize an url if passed in a number', function () {
+    var url = ResourceHelpers.parameterizeUntilParams(userResourceUrl,1);
+    expect( url ).to.equal( user1ResourceUrl );        
+  });
+
 });

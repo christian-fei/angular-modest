@@ -6,11 +6,11 @@ describe('Resource', function() {
   /* helpers */
   var userResourceUrl = '/users/:userId';
   var user1ResourceUrl = '/users/1';
-  var user1ResourcePath = /\/users\/1\/?$/;
+  var user1ResourceMatch = /\/users\/1\/?$/;
   var userAndBooksResourceUrl = '/users/:userId/books/:bookId';
-  var userAndBooksResourcePath = /\/users\/1\/books\/1\/?$/;
+  var user1Book1ResourceMatch = /\/users\/1\/books\/1\/?$/;
   var usersResourceUrl = '/users/';
-  var usersResourcePath = /\/users\/?$/;
+  var usersResourceMatch = /\/users\/?$/;
   var dummyUser = { name:'Elvis', lastName:'Presley' };
   var dummyBook = { name:'Moby Dick', author:'Herman Melville' };
 
@@ -38,35 +38,35 @@ describe('Resource', function() {
   });
 
   it('should get the resource set when no parameters are passed in and no defaultParameters are set', function () {
-    $httpBackend.expectGET(usersResourcePath).respond(200,dummyUser)
+    $httpBackend.expectGET(usersResourceMatch).respond(200,dummyUser)
     var user = new Resource( usersResourceUrl, {} );
     user.get();
     $httpBackend.flush();
   });
 
   it('should get a single resource when passed in the id', function () {
-    $httpBackend.expectGET( user1ResourcePath ).respond(200,dummyUser)
+    $httpBackend.expectGET( user1ResourceMatch ).respond(200,dummyUser)
     var user = new Resource( userResourceUrl, {} );
     user.get({userId:1});
     $httpBackend.flush();
   });
 
   it('should get a single resource and not nested if only parameter for first resource is passed in', function () {
-    $httpBackend.expectGET( user1ResourcePath ).respond(200,dummyUser)
+    $httpBackend.expectGET( user1ResourceMatch ).respond(200,dummyUser)
     var user = new Resource( userAndBooksResourceUrl, {} );
     user.get({userId:1});
     $httpBackend.flush();
   });
 
   it('should get the nested resource until the defined parameters', function () {
-    $httpBackend.expectGET( userAndBooksResourcePath ).respond(200,dummyBook)
+    $httpBackend.expectGET( user1Book1ResourceMatch ).respond(200,dummyBook)
     var userBooks = new Resource( userAndBooksResourceUrl, {} );
     userBooks.get({userId:1,bookId:1});
     $httpBackend.flush();
   });
 
   it('should fallback to defaultParameters when parameters during operation are not passed in', function () {
-    $httpBackend.expectGET( user1ResourcePath ).respond(200,dummyUser)
+    $httpBackend.expectGET( user1ResourceMatch ).respond(200,dummyUser)
     var user = new Resource( userAndBooksResourceUrl, {userId:1} );
     user.get();
     $httpBackend.flush();
@@ -81,12 +81,16 @@ describe('Resource', function() {
     it('should get a single nested resource when passed in the id', function () {
       var user1 = new Resource( userAndBooksResourceUrl, {userId:1} );
 
-      $httpBackend.expectGET( userAndBooksResourcePath ).respond(200,dummyBook)
+      $httpBackend.expectGET( user1Book1ResourceMatch ).respond(200,dummyBook)
       user1.get({bookId:1});
       $httpBackend.flush();
       
-      $httpBackend.expectGET( userAndBooksResourcePath ).respond(200,dummyBook)
+      $httpBackend.expectGET( user1Book1ResourceMatch ).respond(200,dummyBook)
       user1.books.get({bookId:1});
+      $httpBackend.flush();
+
+      $httpBackend.expectGET( user1Book1ResourceMatch ).respond(200,dummyBook)
+      user1.books.get(1);
       $httpBackend.flush();
     });
   });
