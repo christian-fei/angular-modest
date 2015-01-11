@@ -12,8 +12,10 @@ describe('Resource', function() {
   var userBooksResourceUrl = '/users/:userId/books/:bookId';
   var user1Book1ResourceMatch = /\/users\/1\/books\/1\/?$/;
   var userBookSomethingResourceUrl = '/users/:userId/books/:bookId/something/:somethingId';
+  var user1Book1Resource1Match = /\/users\/1\/books\/1\/something\/1\/?$/;
   var dummyUser = { name:'Elvis', lastName:'Presley' };
   var dummyBook = { name:'Moby Dick', author:'Herman Melville' };
+  var dummySomething = { foo:'bar' };
 
   beforeEach(module('modest'));
 
@@ -79,7 +81,7 @@ describe('Resource', function() {
       expect(user1).to.have.property('books');
       expect(user1.books).to.be.an.instanceof(Resource);
     });
-    it('should get a single nested resource when passed in the id', function () {
+    it('should get a single nested resource', function () {
       var user1 = new Resource( userBooksResourceUrl, {userId:1} );
 
       $httpBackend.expectGET( user1Book1ResourceMatch ).respond(200,dummyBook)
@@ -95,10 +97,26 @@ describe('Resource', function() {
       $httpBackend.flush();
     });
 
-    it('should have properties for each nested resource', function () {
+    it('should have properties for deeply nested resource', function () {
       var user1Book1 = new Resource( userBookSomethingResourceUrl, {userId:1,bookId:1} );
       expect(user1Book1).to.have.property('something');
       expect(user1Book1.something).to.be.an.instanceof(Resource);
+    });
+
+    it('should populate deeply nested resources', function () {
+      var user1 = new Resource( userBookSomethingResourceUrl, {userId:1} );
+      expect(user1).to.have.property('books');
+      var user1Book1 = user1.getResourceFor({bookId:1});
+      expect(user1Book1).to.have.property('something');
+      expect(user1Book1.something).to.be.an.instanceof(Resource);
+
+    });
+
+    it('should get a deeply nested resource ', function () {
+      var user1Book1 = new Resource( userBookSomethingResourceUrl, {userId:1,bookId:1} );
+      $httpBackend.expectGET( user1Book1Resource1Match ).respond(200,dummySomething)
+      user1Book1.something.get(1);
+      $httpBackend.flush();
     });
   });
 

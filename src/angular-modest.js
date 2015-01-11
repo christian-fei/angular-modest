@@ -27,6 +27,10 @@
         return $http.get(requestUrl);
       };
 
+      self.getResourceFor = function(params){
+        return new Resource(url,mergeParams(params));
+      };
+
       function populateNestedResource(url,defaultParams){
         var nestedResourceMatches = url.match(/\w+\/(\w+)\/:[^/]*/);
         if( nestedResourceMatches ){
