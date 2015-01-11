@@ -23,7 +23,12 @@
       };
 
       function populateNestedResource(url,defaultParams){
-        console.log( 'resourceUrl', url );
+        var matches = url.match(/\/(^/\w+)\/:[^/]*/gi);
+        console.log( matches );
+
+        if( url.match(/books/) ){
+          console.log( 'resourceUrl', url );
+        }
       }
 
       function mergeWithDefaultParams(params){
