@@ -73,7 +73,6 @@ describe('Resource', function() {
 
   it('should have a property of type Resource if unresolved nested resource is available', function () {
     var user = new Resource( userAndBooksResourceUrl, {userId:1} );
-    console.log( user );
     expect(user).to.have.property('books');
   });
 

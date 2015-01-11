@@ -3,7 +3,7 @@
   var modest = angular.module('modest',['modest.helpers']);
 
   modest.factory('Resource',['$http','ResourceHelpers',function($http,ResourceHelpers){
-    var Resource = function(url,defaultParams){
+    var Resource = function(url,defaultParams,isNested){
       var self = this;
       var _defaultParams = defaultParams || {};
       var _url = url;
@@ -18,16 +18,19 @@
       self.get = function(params){
         params = mergeWithDefaultParams(params);
         var requestUrl = ResourceHelpers.parameterizeUntilParams(_url, params);
-        console.log( requestUrl );
         return $http.get(requestUrl);
       };
 
       function populateNestedResource(url,defaultParams){
-        var matches = url.match(/\/(^/\w+)\/:[^/]*/gi);
-        console.log( matches );
+        //very ugly hack to stop recursion, have to think about it
+        if( isNested )return;
 
-        if( url.match(/books/) ){
-          console.log( 'resourceUrl', url );
+        var nestedResourceMatches = url.match(/\w+\/(\w+)\/:[^/]*/);
+        if( nestedResourceMatches ){
+          var nestedResource = nestedResourceMatches[1];
+          if( !self[nestedResource] ){
+            self[nestedResource] = new Resource(url,defaultParams,true);
+          }
         }
       }
 
