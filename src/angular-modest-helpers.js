@@ -4,17 +4,35 @@
 
   modestHelpers.service('ResourceHelpers',[function(){
     var self = this;
+
     self.parameterize = function(url,params){
       params = params || {}
       return url.replace(/:([^/]*)/gi, function(match, group){
         return params[group] || match;
       });
-    }
+    };
+
     self.parameterizeUntilParams = function(url,params){
       params = params || {}
       url = limitUrlUntilProvidedParams(url,params);
       return self.parameterize(url, params);
     };
+
+    self.getQueryParameters = function(url,params){
+      var queryParameters = {};
+      if( angular.isString(params) || angular.isNumber(params) || !params ){
+        return queryParameters;
+      }
+      var paramsAsArray = Object.keys(params);
+      angular.forEach(paramsAsArray, function(param){
+        if( !url.match(new RegExp(':'+param)) ){
+          queryParameters[param] = params[param];
+        }
+      });
+      return queryParameters;
+    };
+
+
     function limitUrlUntilProvidedParams(url,params){
       var availableParams = url.match(/:([^/]*)/gi);
 

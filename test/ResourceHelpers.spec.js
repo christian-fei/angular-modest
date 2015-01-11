@@ -41,4 +41,10 @@ describe('ResourceHelpers', function() {
     expect( url ).to.equal( user1ResourceUrl );        
   });
 
+  it('should return the query parameters, the ones that do not match the url template', function () {
+    var parameters = {userId:1,foo:'bar'};
+    var queryParameters = ResourceHelpers.getQueryParameters(userResourceUrl,parameters);
+    expect(queryParameters).to.deep.equal({foo:'bar'});
+  });
+
 });
