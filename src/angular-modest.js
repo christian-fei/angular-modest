@@ -20,7 +20,7 @@
       };
 
       self.get = function(params){
-        params = mergeWithDefaultParams(params);
+        params = mergeParams(params);
         var requestUrl = ResourceHelpers.parameterizeUntilParams(_url, params);
         return $http.get(requestUrl);
       };
@@ -35,7 +35,7 @@
         }
       }
 
-      function mergeWithDefaultParams(params){
+      function mergeParams(params){
         return angular.extend(params || {},_defaultParams);
       }
     };
