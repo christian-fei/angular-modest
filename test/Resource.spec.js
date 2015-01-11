@@ -71,9 +71,18 @@ describe('Resource', function() {
     $httpBackend.flush();
   });
 
-  it('should have a property of type Resource if unresolved nested resource is available', function () {
-    var user = new Resource( userAndBooksResourceUrl, {userId:1} );
-    expect(user).to.have.property('books');
+  describe('nested Resource', function () {
+    it('should have a property of type Resource if unresolved nested resource is available', function () {
+      var user1 = new Resource( userAndBooksResourceUrl, {userId:1} );
+      expect(user1).to.have.property('books');
+      expect(user1.books).to.be.an.instanceof(Resource);
+    });
+    it('should get a single nested resource when passed in the id', function () {
+      $httpBackend.expectGET( userAndBooksResourcePath ).respond(200,dummyUser)
+      var user1 = new Resource( userAndBooksResourceUrl, {userId:1} );
+      user1.get({bookId:1})      
+      $httpBackend.flush();
+    });
   });
 
 });
