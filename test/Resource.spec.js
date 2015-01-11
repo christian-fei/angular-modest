@@ -12,6 +12,7 @@ describe('Resource', function() {
   var usersResourceUrl = '/users/';
   var usersResourcePath = /\/users\/?$/;
   var dummyUser = { name:'Elvis', lastName:'Presley' };
+  var dummyBook = { name:'Moby Dick', author:'Herman Melville' };
 
   beforeEach(module('modest'));
 
@@ -58,7 +59,7 @@ describe('Resource', function() {
   });
 
   it('should get the nested resource until the defined parameters', function () {
-    $httpBackend.expectGET( userAndBooksResourcePath ).respond(200,dummyUser)
+    $httpBackend.expectGET( userAndBooksResourcePath ).respond(200,dummyBook)
     var userBooks = new Resource( userAndBooksResourceUrl, {} );
     userBooks.get({userId:1,bookId:1});
     $httpBackend.flush();
@@ -78,9 +79,14 @@ describe('Resource', function() {
       expect(user1.books).to.be.an.instanceof(Resource);
     });
     it('should get a single nested resource when passed in the id', function () {
-      $httpBackend.expectGET( userAndBooksResourcePath ).respond(200,dummyUser)
       var user1 = new Resource( userAndBooksResourceUrl, {userId:1} );
-      user1.get({bookId:1})      
+
+      $httpBackend.expectGET( userAndBooksResourcePath ).respond(200,dummyBook)
+      user1.get({bookId:1});
+      $httpBackend.flush();
+      
+      $httpBackend.expectGET( userAndBooksResourcePath ).respond(200,dummyBook)
+      user1.books.get({bookId:1});
       $httpBackend.flush();
     });
   });
