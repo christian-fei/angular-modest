@@ -8,6 +8,7 @@ describe('ResourceHelpers', function() {
   var usersResourceUrl = '/users/';
   var userAndBooksResourceUrl = '/users/:userId/books/:bookId';
   var user1Book1ResourceUrl = '/users/1/books/1';
+  var user1BooksResourceUrl = '/users/1/books/:bookId';
 
   beforeEach(module('modest.helpers'));
 
@@ -22,22 +23,17 @@ describe('ResourceHelpers', function() {
 
   it('should return the unparameterized url if no parameters are passed in', function () {
     var url = ResourceHelpers.parameterize(userResourceUrl,{});
-    expect( url ).to.equal( usersUrl );
-  });
-
-  it('should not parameterize an url if no parameters are passed in and return the resource set', function () {
-    var url = ResourceHelpers.parameterize(userResourceUrl,{});
-    expect( url ).to.equal( usersUrl );
+    expect( url ).to.equal( userResourceUrl );
   });
 
   it('should return the clean url with no parameters if unexisting parameters are passed in', function () {
     var url = ResourceHelpers.parameterize(userResourceUrl,{foo:'bar'});
-    expect( url ).to.equal( usersUrl );
+    expect( url ).to.equal( userResourceUrl );
   });
 
   it('should parameterize and url only until the provided parameters and cut the rest of the url', function () {
     var url = ResourceHelpers.parameterize(userAndBooksResourceUrl,{userId:1});
-    expect( url ).to.equal( user1ResourceUrl );    
+    expect( url ).to.equal( user1BooksResourceUrl );    
   });
 
   it('should parameterize until the nested resource', function () {

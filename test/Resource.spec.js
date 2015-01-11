@@ -25,7 +25,7 @@ describe('Resource', function() {
 
   it('should save the resourceUrl with which the Resource has been instanciated', function () {
     var user = new Resource( userResourceUrl );
-    expect( user.getResourceUrl() ).to.equal( usersResourceUrl );
+    expect( user.getResourceUrl() ).to.equal( userResourceUrl );
 
     user = new Resource( userResourceUrl, {userId:1} );
     expect( user.getResourceUrl() ).to.equal( user1ResourceUrl );
@@ -69,6 +69,12 @@ describe('Resource', function() {
     var user = new Resource( userAndBooksResourceUrl, {userId:1} );
     user.get();
     $httpBackend.flush();
+  });
+
+  it('should have a property of type Resource if unresolved nested resource is available', function () {
+    var user = new Resource( userAndBooksResourceUrl, {userId:1} );
+    console.log( user );
+    expect(user).to.have.property('books');
   });
 
 });

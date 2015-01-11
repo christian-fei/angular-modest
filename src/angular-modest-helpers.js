@@ -6,11 +6,17 @@
     var self = this;
     self.parameterize = function(url,params){
       params = params || {}
-      url = self.limitUrlUntilProvidedParams(url,params);
       return url.replace(/:([^/]*)/gi, function(match, group){
         return params[group] || match;
       });
     }
+    self.parameterizeUntilParams = function(url,params){
+      params = params || {}
+      url = self.limitUrlUntilProvidedParams(url,params);
+      return url.replace(/:([^/]*)/gi, function(match, group){
+        return params[group] || match;
+      });
+    };
     self.limitUrlUntilProvidedParams = function(url,params){
       var availableParams = url.match(/:([^/]*)/gi);
 
