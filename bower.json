@@ -1,11 +1,11 @@
 {
   "name": "angular-modest",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "homepage": "https://github.com/christian-fei/angular-modest",
   "authors": [
     "Christian Fei <crifei93@gmail.com>"
   ],
-  "description": "restful entities for angular",
+  "description": "nested restful resources for angular",
   "main": "src/angular-model.js",
   "keywords": [
     "angular",
