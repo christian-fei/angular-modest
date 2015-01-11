@@ -26,11 +26,6 @@ describe('ResourceHelpers', function() {
     expect( url ).to.equal( userResourceUrl );
   });
 
-  it('should return the clean url with no parameters if unexisting parameters are passed in', function () {
-    var url = ResourceHelpers.parameterize(userResourceUrl,{foo:'bar'});
-    expect( url ).to.equal( userResourceUrl );
-  });
-
   it('should parameterize and url only until the provided parameters and cut the rest of the url', function () {
     var url = ResourceHelpers.parameterize(userAndBooksResourceUrl,{userId:1});
     expect( url ).to.equal( user1BooksResourceUrl );    
