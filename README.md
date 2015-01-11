@@ -57,9 +57,7 @@ Returns an instance of `Resource`
 |       Param         |       Type       |                  Description                                                   |
 |:--------------------|:-----------------|:-------------------------------------------------------------------------------|
 | url                 | string           | A parametrized URL template with parameters prefixed by : as in /user/:username|
-|---------------------|------------------|--------------------------------------------------------------------------------|
 | defaultParams (opt) | Object | int     | Default values for the parametrized URL template.                              |
-|---------------------|------------------|--------------------------------------------------------------------------------|
 
 ## Instance methods
 
@@ -81,7 +79,6 @@ Returns an instance of the nested `Resource`
 |       Param         |       Type       |                  Description                                                   |
 |:--------------------|:-----------------|:-------------------------------------------------------------------------------|
 | params              | Object           | Default values for the parametrized URL template.                              |
-|---------------------|------------------|--------------------------------------------------------------------------------|
 
 
 ### get
@@ -93,7 +90,6 @@ Return an $http object to interact with, making a request to the desired resourc
 |       Param         |       Type       |                  Description                                                   |
 |:--------------------|:-----------------|:-------------------------------------------------------------------------------|
 | params              | Object           | Default values for the parametrized URL template.                              |
-|---------------------|------------------|--------------------------------------------------------------------------------|
 
 
 
