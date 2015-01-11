@@ -57,7 +57,7 @@ Returns an instance of `Resource`
 |       Param         |       Type       |                  Description                                                   |
 |:--------------------|:-----------------|:-------------------------------------------------------------------------------|
 | url                 | string           | A parametrized URL template with parameters prefixed by : as in /user/:username|
-| defaultParams (opt) | Object | int     | Default values for the parametrized URL template.                              |
+| defaultParams (opt) | Object, int      | Default values for the parametrized URL template.                              |
 
 ## Instance methods
 
