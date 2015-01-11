@@ -85,13 +85,26 @@ Returns an instance of the nested `Resource`
 
 ### get
 
-`resource.get(params)`
+`resource.get(params,queryParameters)`
 
 Return an $http object to interact with, making a request to the desired resource.
 
 |       Param         |       Type       |                  Description                                                   |
 |:--------------------|:-----------------|:-------------------------------------------------------------------------------|
 | params              | Object           | Default values for the parametrized URL template.                              |
+| queryParameters     | Object           | Query parameters [WIP]                                                         |
+
+
+### post,put,delete,head,patch
+
+`resource.VERB(params,payload)`
+
+Return an $http object to interact with, making a request to the desired resource.
+
+|       Param         |       Type       |                  Description                                                   |
+|:--------------------|:-----------------|:-------------------------------------------------------------------------------|
+| params              | Object           | Default values for the parametrized URL template.                              |
+| payload             | Object           | Payload to be sent with the request                                            |
 
 
 
@@ -131,6 +144,18 @@ user1.books.get({bookId:1}); // returns $http with GET request made to /users/1/
 user1.books.get(1); // returns $http with GET request made to /users/1/books/1
 
 ```
+
+
+
+
+
+
+
+# TODO
+
+- [ ] fix query parameters when performing request
+- [ ] fix parameter duplication when requesting nested resource
+
 
 
 

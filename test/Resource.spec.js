@@ -53,7 +53,7 @@ describe('Resource', function() {
   it('should get a single resource with additional queryParameters if properties of the parameters are not present in the url', function () {
     $httpBackend.expectGET( user1ResourceMatchWithFooBarQuery ).respond(200,dummyUser)
     var user = new Resource( userResourceUrl, {} );
-    user.get({userId:1,foo:'bar'});
+    user.get({userId:1},{foo:'bar'});
     $httpBackend.flush();    
   });
 

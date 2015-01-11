@@ -40,10 +40,12 @@
             }
             httpConfig.url = ResourceHelpers.parameterizeUntilParams(_url, params);
             httpConfig.method = method;
-            if( 'get'===httpConfig.method ){
-              httpConfig.params = ResourceHelpers.getQueryParameters(_url,params);
-            } else {
-              httpConfig.data = payload;
+            if( payload ) {
+              if( 'get'===httpConfig.method ){
+                httpConfig.params = ResourceHelpers.getQueryParameters(_url,payload);
+              } else {
+                httpConfig.data = payload;
+              }
             }
             return $http(httpConfig);
           }
