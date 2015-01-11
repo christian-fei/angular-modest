@@ -1,0 +1,37 @@
+{
+  "name": "angular-modest",
+  "version": "0.0.4",
+  "homepage": "https://github.com/christian-fei/angular-modest",
+  "authors": [
+    "Christian Fei <crifei93@gmail.com>"
+  ],
+  "description": "nested restful resources for angular",
+  "main": "src/angular-model.js",
+  "keywords": [
+    "angular",
+    "rest",
+    "resource",
+    "model",
+    "entity",
+    "nested"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "node_modules",
+    "angular-modest.sublime-project",
+    "angular-modest.sublime-workspace",
+    "angular-nester-resource.js",
+    "bower_components",
+    "circle.yml",
+    "coverage",
+    "karma.conf.js",
+    "coverage.svg",
+    "create-coveradge-badge.js",
+    "karma.confg.js",
+    "angular-resource.js",
+    "angular-nested-resource.js"
+  ],
+  "devDependencies": {
+    "angular-mocks": "~1.3.8"
+  }
+}
