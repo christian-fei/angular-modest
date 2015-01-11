@@ -32,7 +32,7 @@
         var httpConfig = {};
 
         self[method] = (function(method){
-          return function(params){
+          return function(params,payload){
             if( !angular.isString(params) && !angular.isNumber(params) ){
               params = mergeParams(params);
             }
@@ -41,7 +41,7 @@
             if( 'get'===httpConfig.method ){
               httpConfig.params = ResourceHelpers.getQueryParameters(_url,params);
             } else {
-              httpConfig.data = params;
+              httpConfig.data = payload;
             }
             return $http(httpConfig);
           }

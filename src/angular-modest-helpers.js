@@ -58,7 +58,13 @@
         var indexOfColon = url.indexOf(':');
         if( availableParams.length > 0 ){
           url = url.substring(0, indexOfColon+availableParams[0].length+1);
-          return url.replace(new RegExp(':'+availableParams[0]), params);
+          var replacement = '';
+          if( params[availableParams[0]] ){
+            replacement = params[availableParams[0]];
+          } else if( angular.isNumber(params) || angular.isString(params) ) {
+            replacement = params;
+          }
+          return url.replace(new RegExp(':'+availableParams[0]), replacement);
         }
         return url.substring(0,indexOfColon);
       }

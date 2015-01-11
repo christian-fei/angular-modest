@@ -82,6 +82,13 @@ describe('Resource', function() {
     $httpBackend.flush();
   });
 
+  it('should POST to a resource set', function () {
+    $httpBackend.expectPOST( usersResourceMatch, dummyUser).respond(201,dummyUser)
+    var user = new Resource( userResourceUrl, {} );
+    user.post({},dummyUser);
+    $httpBackend.flush();        
+  });
+
   describe('nested Resource', function () {
     it('should have a property of type Resource if unresolved nested resource is available', function () {
       var user1 = new Resource( userBooksResourceUrl, {userId:1} );
