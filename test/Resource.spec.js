@@ -35,11 +35,6 @@ describe('Resource', function() {
     expect( user.getResourceUrl() ).to.equal( user1ResourceUrl );
   });
 
-  it('should parameterize the resourceUrl if default parameters have been passed in', function () {
-    var user = new Resource( userResourceUrl, {userId:1} );
-    expect( user.getResourceUrl() ).to.equal( user1ResourceUrl );
-  });
-
   it('should get the resource set when no parameters are passed in and no defaultParameters are set', function () {
     $httpBackend.expectGET(usersResourceMatch).respond(200,dummyUser)
     var user = new Resource( usersResourceUrl, {} );
@@ -55,9 +50,13 @@ describe('Resource', function() {
   });
 
   it('should get a single resource and not nested if only parameter for first resource is passed in', function () {
-    $httpBackend.expectGET( user1ResourceMatch ).respond(200,dummyUser)
     var user = new Resource( userBooksResourceUrl, {} );
+    $httpBackend.expectGET( user1ResourceMatch ).respond(200,dummyUser)
     user.get({userId:1});
+    $httpBackend.flush();
+
+    $httpBackend.expectGET( user1ResourceMatch ).respond(200,dummyUser)
+    user.get(1);
     $httpBackend.flush();
   });
 
