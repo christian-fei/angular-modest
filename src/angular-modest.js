@@ -115,7 +115,7 @@
 
     self.parameterizeUntilParams = function(url,params){
       params = params || {}
-      url = limitUrlUntilProvidedParams(url,params);
+      url = self.limitUntilParams(url,params);
       return self.parameterize(url, params);
     };
 
@@ -130,31 +130,36 @@
       return queryParameters;
     };
 
-    function limitUrlUntilProvidedParams(url,params){
+    self.getAvailableParams = function(url,params){
       var availableParams = url.match(paramGroups);
-      if( !availableParams ) return url;
+      if( availableParams ){
+        return availableParams
+                .filter(filterPortAndProtocol)
+                .map(mapToParamsWithoutColon);
+      }
+      return null;
+    };
 
-      var paramsToReplace = [];
-      var indexOfColon = url.search(paramRegExp);
+    self.limitUntilParams = function(url,params){
+      var availableParams = self.getAvailableParams(url,params);
+      if( !availableParams ){
+        return url;
+      }
 
-      availableParams = availableParams
-                          .filter(filterPortAndProtocol)
-                          .map(mapToParamsWithoutColon);
+      var paramsToReplace = getParamsToReplace(params,availableParams);
 
-      angular.forEach(availableParams, function(availableParam){
-        if( params[availableParam] !== undefined ) {
-          paramsToReplace.push(availableParam);
-        }
-      });
-      
       if( 0 === paramsToReplace.length ){
+        var indexOfColon = url.search(paramRegExp);
         url = url.substring(0, indexOfColon+availableParams[0].length+1);
         var replacement = getReplacementForParams(params,availableParams[0]);
         return url.replace(new RegExp(':'+availableParams[0]), replacement);
       }
 
-      var limitedUrl = '';
+      return limitWithParams(url,paramsToReplace);
+    }
 
+    function limitWithParams(url,paramsToReplace){
+      var limitedUrl = '';
       var prevParamToReplace = '';
 
       angular.forEach(paramsToReplace,function(paramToReplace){
@@ -168,12 +173,23 @@
       return limitedUrl;
     }
 
+
     function mapToParamsWithoutColon(param){
       return param.substr(1);
     }
 
     function filterPortAndProtocol(param){
       return param.match(/^:[^\d+|^\/]/);
+    }
+
+    function getParamsToReplace(params,availableParams){
+      var paramsToReplace = [];
+      angular.forEach(availableParams, function(availableParam){
+        if( params[availableParam] !== undefined ) {
+          paramsToReplace.push(availableParam);
+        }
+      });
+      return paramsToReplace;
     }
 
     function getReplacementForParams(params,availableParam){
