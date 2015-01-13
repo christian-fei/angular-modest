@@ -26,6 +26,24 @@ describe('Resource', function() {
     });
   });
 
+  describe('url', function () {
+
+    afterEach(function () {
+      $httpBackend.flush();
+    });
+    it('should make a request to a domain', function () {
+      var user = new Resource( 'example.com/users/:userId/books/:bookId', {} );
+      $httpBackend.expectGET(/example\.com\/users\/?$/).respond(200,dummyUser);
+      user.get();
+    });
+
+    xit('should make a request to a domain with port', function () {
+      var user = new Resource( 'localhost:8080/users/:userId/books/:bookId', {} );
+      $httpBackend.expectGET(/localhost:8080\/users\/?$/).respond(200,dummyUser);
+      user.get();
+    });
+  });
+
   describe('resource set', function () {
     afterEach(function () {
       $httpBackend.flush();  
