@@ -62,8 +62,14 @@ describe('Resource', function() {
       $httpBackend.flush();  
     });
     
-    it('should get the resource set when no parameters are provided', function () {
+    it('should get the resource set when no parameters are provided when performing request', function () {
       var user = new Resource( '/api/users/:userId/books/:bookId', {} );
+      $httpBackend.expectGET(/\/users\/?$/).respond(200,dummyUser);
+      user.get();
+    });
+
+    it('should get the resource set when no parameters are provided in the url', function () {
+      var user = new Resource( '/api/users/', {} );
       $httpBackend.expectGET(/\/users\/?$/).respond(200,dummyUser);
       user.get();
     });
@@ -157,6 +163,15 @@ describe('Resource', function() {
       expect(user1Book1).to.have.property('something');
       expect(user1Book1.something).to.be.an.instanceof(Resource);
       expect(user1Book1.something.getResourceUrl()).to.equal('/users/1/books/1/something/:somethingId');
+    });
+  });
+
+  describe('edge-cases', function () {
+    it('should ignore parameters not present in the url', function () {
+      $httpBackend.expectGET( /\/users\/?$/ ).respond(200,dummyUser)
+      var user = new Resource( '/users/:userId/books/:bookId', {} );
+      user.get({foo:'bar'});
+      $httpBackend.flush();  
     });
   });
 

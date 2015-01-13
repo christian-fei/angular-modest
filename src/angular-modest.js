@@ -16,10 +16,6 @@
 
       populateNestedResource(_resourceUrl,defaultParams)
 
-      self.getDefaultParams = function(){
-        return _defaultParams;
-      };
-
       self.getResourceUrl = function(){
         return _resourceUrl;
       };
@@ -32,15 +28,14 @@
       ['get','post','put','delete','head','patch'].forEach(function(method){
         var httpConfig = {};
 
-        self[method] = (function(method){
-          return function(params,payload){
+        self[method] = function(params,payload){
             if( !angular.isString(params) && !angular.isNumber(params) ){
               params = mergeParams(params);
             }
             httpConfig.url = ResourceHelpers.parameterizeUntilParams(_url, params);
             httpConfig.method = method;
             if( payload ) {
-              if( 'get'===httpConfig.method ){
+              if( httpConfig.method.match(/get/i) ){
                 httpConfig.params = ResourceHelpers.getQueryParameters(_url,payload);
               } else {
                 httpConfig.data = payload;
@@ -48,7 +43,6 @@
             }
             return $http(httpConfig);
           }
-        })(method);
       });
 
 
@@ -98,9 +92,6 @@
 
     self.getQueryParameters = function(url,params){
       var queryParameters = {};
-      if( angular.isString(params) || angular.isNumber(params) || !params ){
-        return queryParameters;
-      }
       var paramsAsArray = Object.keys(params);
       angular.forEach(paramsAsArray, function(param){
         if( !url.match(new RegExp(':'+param)) ){
@@ -112,17 +103,14 @@
 
     function limitUrlUntilProvidedParams(url,params){
       var availableParams = url.match(paramGroups);
+      if( !availableParams ) return url;
+
       var paramsToReplace = [];
       var indexOfColon = url.search(paramRegExp);
 
-      availableParams = availableParams.filter(filterPortAndProtocol);
-
-      if( !availableParams || availableParams.length == 0 ){
-        var end = indexOfColon>0 ? indexOfColon : url.length;
-        return url.substr(0,end);
-      }
-
-      availableParams = availableParams.map(mapToParamsWithoutColon);
+      availableParams = availableParams
+                          .filter(filterPortAndProtocol)
+                          .map(mapToParamsWithoutColon);
 
       angular.forEach(availableParams, function(availableParam){
         if( params[availableParam] !== undefined ) {
@@ -131,12 +119,9 @@
       });
       
       if( 0 === paramsToReplace.length ){
-        if( availableParams.length > 0 ){
-          url = url.substring(0, indexOfColon+availableParams[0].length+1);
-          var replacement = getReplacementForParams(params,availableParams[0]);
-          return url.replace(new RegExp(':'+availableParams[0]), replacement);
-        }
-        return url.substring(0,indexOfColon);
+        url = url.substring(0, indexOfColon+availableParams[0].length+1);
+        var replacement = getReplacementForParams(params,availableParams[0]);
+        return url.replace(new RegExp(':'+availableParams[0]), replacement);
       }
 
       var limitedUrl = '';
@@ -163,13 +148,10 @@
     }
 
     function getReplacementForParams(params,availableParam){
-      var replacement = '';
-      if( params[availableParam] ){
-        replacement = params[availableParam];
-      } else if( angular.isNumber(params) || angular.isString(params) ) {
-        replacement = params;
+      if( angular.isNumber(params) || angular.isString(params) ) {
+        return params;
       }
-      return replacement;
+      return params[availableParam] || '';
     }
   }]);
 })(angular,undefined);
