@@ -8,9 +8,8 @@
   var modest = angular.module('modest',['modest.helpers']);
 
   modest.factory('Resource',['$http','ResourceHelpers',function($http,ResourceHelpers){
-    var Resource = function(url,defaultParams,resourceName){
+    var Resource = function(url,defaultParams){
       var self = this;
-      var _resourceName = resourceName;
       var _defaultParams = defaultParams || {};
       var _url = url;
       var _resourceUrl = ResourceHelpers.parameterize(_url,_defaultParams);
@@ -57,9 +56,8 @@
         var nestedResourceMatches = url.match(/\w+\/(\w+)\/:[^/]*/);
         if( nestedResourceMatches ){
           var nestedResource = nestedResourceMatches[1];
-          if( _resourceName === nestedResource )
-            return
-          self[nestedResource] = new Resource(url,defaultParams,nestedResource);
+          if( self instanceof NestedResource ) return;
+          self[nestedResource] = new NestedResource(url,defaultParams,nestedResource);
         }
       }
 
@@ -67,6 +65,12 @@
         return angular.extend(params || {},_defaultParams);
       }
     };
+
+    var NestedResource = function(){ Resource.apply(this,arguments); };
+
+    NestedResource.prototype=Object.create(Resource.prototype);
+    NestedResource.prototype.constructor=NestedResource;
+
 
     return Resource;
   }]);
