@@ -26,7 +26,7 @@
       };
 
       self.getResourceFor = function(params){
-        return new Resource(url,params);
+        return new Resource(_resourceUrl,params);
       };
 
 
