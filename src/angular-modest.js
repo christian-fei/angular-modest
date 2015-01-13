@@ -26,7 +26,7 @@
 
 
 
-
+      /* PUBLIC */
       function getResourceUrl(){
         return _resourceUrl;
       };
@@ -35,6 +35,8 @@
         return new Resource(_resourceUrl,params);
       };
 
+      
+      /* PRIVATE */
       function populateNestedResource(defaultParams){
         if( isRootResource() )return;
 
@@ -106,20 +108,34 @@
 
     var paramGroups = /:([^/]*)/gi;
 
-    self.parameterize = function(url,params){
+    self.parameterize = parameterize;
+
+    self.parameterizeUntilParams = parameterizeUntilParams;
+
+    self.getQueryParameters = getQueryParameters;
+
+    self.getAvailableParams = getAvailableParams;
+
+    self.limitUntilParams = limitUntilParams;
+
+
+
+
+    /* PUBLIC */
+    function parameterize(url,params){
       params = params || {}
       return url.replace(paramGroups, function(match, group){
         return params[group] || match;
       });
     };
 
-    self.parameterizeUntilParams = function(url,params){
+    function parameterizeUntilParams(url,params){
       params = params || {}
       url = self.limitUntilParams(url,params);
       return self.parameterize(url, params);
     };
-
-    self.getQueryParameters = function(url,params){
+    
+    function getQueryParameters(url,params){
       var queryParameters = {};
       var paramsAsArray = Object.keys(params);
       angular.forEach(paramsAsArray, function(param){
@@ -128,9 +144,9 @@
         }
       });
       return queryParameters;
-    };
+    }
 
-    self.getAvailableParams = function(url,params){
+    function getAvailableParams(url,params){
       var availableParams = url.match(paramGroups);
       if( availableParams ){
         return availableParams
@@ -138,9 +154,9 @@
                 .map(mapToParamsWithoutColon);
       }
       return null;
-    };
-
-    self.limitUntilParams = function(url,params){
+    }
+    
+    function limitUntilParams(url,params){
       var availableParams = self.getAvailableParams(url,params);
       if( !availableParams ){
         return url;
@@ -158,6 +174,8 @@
       return limitWithParams(url,paramsToReplace);
     }
 
+
+    /* PRIVATE */
     function limitWithParams(url,paramsToReplace){
       var limitedUrl = '';
       var prevParamToReplace = '';
