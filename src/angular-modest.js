@@ -132,12 +132,7 @@
         var indexOfColon = url.indexOf(':');
         if( availableParams.length > 0 ){
           url = url.substring(0, indexOfColon+availableParams[0].length+1);
-          var replacement = '';
-          if( params[availableParams[0]] ){
-            replacement = params[availableParams[0]];
-          } else if( angular.isNumber(params) || angular.isString(params) ) {
-            replacement = params;
-          }
+          var replacement = getReplacementForParams(params,availableParams[0]);
           return url.replace(new RegExp(':'+availableParams[0]), replacement);
         }
         return url.substring(0,indexOfColon);
@@ -156,6 +151,16 @@
       });
 
       return limitedUrl;
+    }
+
+    function getReplacementForParams(params,availableParam){
+      var replacement = '';
+      if( params[availableParam] ){
+        replacement = params[availableParam];
+      } else if( angular.isNumber(params) || angular.isString(params) ) {
+        replacement = params;
+      }
+      return replacement;
     }
   }]);
 })(angular,undefined);

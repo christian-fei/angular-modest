@@ -27,34 +27,38 @@ describe('Resource', function() {
   });
 
   describe('resource set', function () {
+    afterEach(function () {
+      $httpBackend.flush();  
+    });
+    
     it('should get the resource set when no parameters are provided', function () {
-      var user = new Resource( '/users/:userId/books/:bookId', {} );
+      var user = new Resource( '/api/users/:userId/books/:bookId', {} );
       $httpBackend.expectGET(/\/users\/?$/).respond(200,dummyUser);
       user.get();
-      $httpBackend.flush();
     });
 
     it('should create a resource by POSTing to resource set', function () {
-      $httpBackend.expectPOST( /\/users\/?$/, dummyUser).respond(201,dummyUser)
-      var user = new Resource( '/users/:userId', {} );
+      $httpBackend.expectPOST( /\/api\/users\/?$/, dummyUser).respond(201,dummyUser)
+      var user = new Resource( '/api/users/:userId', {} );
       user.post({},dummyUser);
-      $httpBackend.flush();        
     });
   });
 
   describe('resource', function () {
+    afterEach(function () {
+      $httpBackend.flush();  
+    });
+
     it('should get the resource when parameters are provided', function () {
       $httpBackend.expectGET( /\/users\/1\/?$/ ).respond(200,dummyUser)
       var user = new Resource( '/users/:userId', {} );
       user.get({userId:1});
-      $httpBackend.flush();
     });
 
     it('should get the resource with additional queryParameters', function () {
       $httpBackend.expectGET( /\/users\/1\?foo=bar\/?$/ ).respond(200,dummyUser)
       var user = new Resource( '/users/:userId', {} );
       user.get({userId:1},{foo:'bar'});
-      $httpBackend.flush();
     });
 
     it('should get the first resource until the provided parameter', function () {
@@ -65,21 +69,18 @@ describe('Resource', function() {
 
       $httpBackend.expectGET( /\/users\/1\/?$/ ).respond(200,dummyUser)
       user.get(1);
-      $httpBackend.flush();
     });
 
     it('should get the resource with fallback to defaultParameters when parameters during operation are not provided', function () {
       $httpBackend.expectGET( /\/users\/1\/?$/ ).respond(200,dummyUser)
       var user = new Resource( '/users/:userId/books/:bookId', {userId:1} );
       user.get();
-      $httpBackend.flush();
     });
 
     it('should get a deeply nested resource ', function () {
       var user1Book1 = new Resource( '/users/:userId/books/:bookId/something/:somethingId', {userId:1,bookId:1} );
       $httpBackend.expectGET( /\/users\/1\/books\/1\/something\/1\/?$/ ).respond(200,dummySomething)
       user1Book1.something.get(1);
-      $httpBackend.flush();
     });
   });
 
