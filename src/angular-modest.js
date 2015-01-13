@@ -79,9 +79,13 @@
   modestHelpers.service('ResourceHelpers',[function(){
     var self = this;
 
+    var paramRegExp = /:[^\d|^\/]/gi;
+
+    var paramGroups = /:([^/]*)/gi;
+
     self.parameterize = function(url,params){
       params = params || {}
-      return url.replace(/:([^/]*)/gi, function(match, group){
+      return url.replace(paramGroups, function(match, group){
         return params[group] || match;
       });
     };
@@ -106,30 +110,27 @@
       return queryParameters;
     };
 
-
     function limitUrlUntilProvidedParams(url,params){
-      var availableParams = url.match(/:([^/]*)/gi);
+      var availableParams = url.match(paramGroups);
+      var paramsToReplace = [];
+      var indexOfColon = url.search(paramRegExp);
+
+      availableParams = availableParams.filter(filterPortAndProtocol);
 
       if( !availableParams || availableParams.length == 0 ){
-        var indexOfColon = url.indexOf(':');
         var end = indexOfColon>0 ? indexOfColon : url.length;
         return url.substr(0,end);
       }
 
-      availableParams = availableParams.map(function(p){
-        return p.substr(1);
-      });
-
-      var paramsToReplace = [];
+      availableParams = availableParams.map(mapToParamsWithoutColon);
 
       angular.forEach(availableParams, function(availableParam){
         if( params[availableParam] !== undefined ) {
           paramsToReplace.push(availableParam);
         }
       });
-
+      
       if( 0 === paramsToReplace.length ){
-        var indexOfColon = url.indexOf(':');
         if( availableParams.length > 0 ){
           url = url.substring(0, indexOfColon+availableParams[0].length+1);
           var replacement = getReplacementForParams(params,availableParams[0]);
@@ -151,6 +152,14 @@
       });
 
       return limitedUrl;
+    }
+
+    function mapToParamsWithoutColon(param){
+      return param.substr(1);
+    }
+
+    function filterPortAndProtocol(param){
+      return param.match(/^:[^\d+|^\/]/);
     }
 
     function getReplacementForParams(params,availableParam){

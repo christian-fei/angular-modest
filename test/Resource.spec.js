@@ -27,21 +27,34 @@ describe('Resource', function() {
   });
 
   describe('url', function () {
-
-    afterEach(function () {
-      $httpBackend.flush();
-    });
     it('should make a request to a domain', function () {
       var user = new Resource( 'example.com/users/:userId/books/:bookId', {} );
       $httpBackend.expectGET(/example\.com\/users\/?$/).respond(200,dummyUser);
       user.get();
+      $httpBackend.flush();
     });
 
-    xit('should make a request to a domain with port', function () {
+    it('should make a request to a domain with port', function () {
       var user = new Resource( 'localhost:8080/users/:userId/books/:bookId', {} );
       $httpBackend.expectGET(/localhost:8080\/users\/?$/).respond(200,dummyUser);
       user.get();
+      $httpBackend.flush();
     });
+
+    it('should make a request to a domain with port and protocol', function () {
+      var user = new Resource( 'http://localhost:8080/users/:userId/books/:bookId', {} );
+      $httpBackend.expectGET(/http:\/\/localhost:8080\/users\/?$/).respond(200,dummyUser);
+      user.get();
+      $httpBackend.flush();
+    });
+
+    it('should make a request to a domain with port and protocol and still be able to replace parameters', function () {
+      var user = new Resource( 'http://localhost:8080/users/:userId/books/:bookId', {} );
+      $httpBackend.expectGET(/http:\/\/localhost:8080\/users\/1\/?$/).respond(200,dummyUser);
+      user.get(1);
+      $httpBackend.flush();
+    });
+
   });
 
   describe('resource set', function () {
