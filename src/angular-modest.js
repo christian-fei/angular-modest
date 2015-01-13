@@ -8,56 +8,85 @@
   var modest = angular.module('modest',['modest.helpers']);
 
   modest.factory('Resource',['$http','ResourceHelpers',function($http,ResourceHelpers){
-    var Resource = function(url,defaultParams){
+    var Resource = function(url,defaultParams,parent){
       var self = this;
+      self.id = Math.random()*1000;
+      var _parent = parent;
       var _defaultParams = defaultParams || {};
       var _url = url;
       var _resourceUrl = ResourceHelpers.parameterize(_url,_defaultParams);
 
-      populateNestedResource(_resourceUrl,defaultParams)
+      self.getResourceUrl = getResourceUrl;
 
-      self.getResourceUrl = function(){
+      self.getResourceFor = getResourceFor;
+
+      populateNestedResource(_defaultParams);
+
+      ['get','post','put','delete','head','patch'].forEach(createRequestMethodFor);
+
+
+
+
+      function getResourceUrl(){
         return _resourceUrl;
       };
 
-      self.getResourceFor = function(params){
+      function getResourceFor(params){
         return new Resource(_resourceUrl,params);
       };
 
+      function populateNestedResource(defaultParams){
+        if( isRootResource() )return;
 
-      ['get','post','put','delete','head','patch'].forEach(function(method){
-        var httpConfig = {};
-
-        self[method] = function(params,payload){
-            if( !angular.isString(params) && !angular.isNumber(params) ){
-              params = mergeParams(params);
-            }
-            httpConfig.url = ResourceHelpers.parameterizeUntilParams(_url, params);
-            httpConfig.method = method;
-            if( payload ) {
-              if( httpConfig.method.match(/get/i) ){
-                httpConfig.params = ResourceHelpers.getQueryParameters(_url,payload);
-              } else {
-                httpConfig.data = payload;
-              }
-            }
-            return $http(httpConfig);
-          }
-      });
-
-
-      function populateNestedResource(url,defaultParams){
-        var nestedResourceMatches = url.match(/\w+\/(\w+)\/:[^/]*/);
+        var nestedResourceMatches = _resourceUrl.match(/\w+\/(\w+)\/:[^/]*/);
+        var resources = _resourceUrl.match(/:[^\d|^\/]+/gi);
         if( nestedResourceMatches ){
           var nestedResource = nestedResourceMatches[1];
-          if( self instanceof NestedResource ) return;
-          self[nestedResource] = new NestedResource(url,defaultParams,nestedResource);
+          if( self instanceof NestedResource ){ // TODO: use parent.id instead?
+            return;
+          }
+          self[nestedResource] = new NestedResource(_resourceUrl,defaultParams,self);
         }
+      }
+
+      function isRootResource(){
+        return !parent && Object.keys(_defaultParams).length == 0;
+      }
+
+      function createRequestMethodFor(method){
+        self[method] = function(params,payload){
+          var httpConfig = {};
+          params = setParams(params);
+          httpConfig.url = ResourceHelpers.parameterizeUntilParams(_url, params);
+          httpConfig.method = method;
+
+          httpConfig = setPayload(httpConfig,payload);
+          return $http(httpConfig);
+        }
+      }
+
+      function setParams(params){
+        if( !angular.isString(params) && !angular.isNumber(params) ){
+          return mergeParams(params);
+        }
+        return params;
+      }
+
+      function setPayload(httpConfig,payload){
+        if( payload ) {
+          if( httpConfig.method.match(/get/i) ){
+            httpConfig.params = ResourceHelpers.getQueryParameters(_url,payload);
+          } else {
+            httpConfig.data = payload;
+          }
+        }
+        return httpConfig;
       }
 
       function mergeParams(params){
         return angular.extend(params || {},_defaultParams);
       }
+
     };
 
     var NestedResource = function(){ Resource.apply(this,arguments); };

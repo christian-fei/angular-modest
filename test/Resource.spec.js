@@ -15,6 +15,21 @@ describe('Resource', function() {
     $httpBackend.whenGET(/\/users\/\d\/?$/).respond(200,dummyUser);
   }));
 
+  describe('playground', function () {
+    it('should play nicely', function () {
+      $httpBackend.expectGET(/http:\/\/localhost:8080\/api\/users\/?$/).respond(200,dummyUser);
+      var user = new Resource( 'http://localhost:8080/api/users/:userId/books/:bookId');
+      user.get();
+      $httpBackend.flush();
+
+      $httpBackend.expectGET(/http:\/\/localhost:8080\/api\/users\/1\/books\/1\/?$/).respond(200,dummyUser);
+      var user1books = user.getResourceFor({userId:1});
+      user1books.get({bookId:1});
+      $httpBackend.flush();
+
+    });    
+  });
+
   describe('#getResourceUrl', function () {
     it('should preserve the unparameterized url if none are passed', function () {
       var user = new Resource( '/users/:userId' );
@@ -126,6 +141,16 @@ describe('Resource', function() {
 
 
   describe('nested Resource', function () {
+    it('should not parse the first nested resource', function () {
+      var user = new Resource( 'http://localhost:8080/api/users/:userId/books/:bookId',{userId:1} );
+      expect(user).to.not.have.property('users');
+      expect(user).to.have.property('books');
+
+      user = new Resource( 'http://localhost:8080/api/users/:userId/books/:bookId' );
+      expect(user).to.not.have.property('users');
+      expect(user).to.not.have.property('books');
+    });
+
     it('should get the nested resource until the provided parameters', function () {
       $httpBackend.expectGET( /\/users\/1\/books\/1\/?$/ ).respond(200,dummyBook)
       var userBooks = new Resource( '/users/:userId/books/:bookId', {} );

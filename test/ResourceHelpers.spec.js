@@ -24,6 +24,9 @@ describe('ResourceHelpers', function() {
   it('should return the unparameterized url if no parameters are passed in', function () {
     var url = ResourceHelpers.parameterize(userResourceUrl,{});
     expect( url ).to.equal( userResourceUrl );
+
+    var url = ResourceHelpers.parameterize(userResourceUrl);
+    expect( url ).to.equal( userResourceUrl );
   });
 
   it('should parameterize an url only until the provided parameters and cut the rest of the url', function () {
@@ -39,6 +42,11 @@ describe('ResourceHelpers', function() {
   it('should parametrize an url if passed in a number', function () {
     var url = ResourceHelpers.parameterizeUntilParams(userResourceUrl,1);
     expect( url ).to.equal( user1ResourceUrl );        
+  });
+
+  it('should return the unparameterized url until the first colon if no parameters are passed in', function () {
+    var url = ResourceHelpers.parameterizeUntilParams(userResourceUrl);
+    expect( url ).to.equal( usersResourceUrl );
   });
 
   it('should return the query parameters, the ones that do not match the url template', function () {
