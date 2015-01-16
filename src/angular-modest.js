@@ -10,11 +10,13 @@
   modest.factory('Resource',['$http','ResourceHelpers',function($http,ResourceHelpers){
     var Resource = function(url,defaultParams,parent){
       var self = this;
-      self._id = Math.random()*1000;
       var _parent = parent;
       var _defaultParams = defaultParams || {};
       var _url = url;
       var _resourceUrl = ResourceHelpers.parameterize(_url,_defaultParams);
+
+      self._id = Math.random()*1000;
+      self.$request = null;
 
       self.getResourceUrl = getResourceUrl;
 
@@ -63,7 +65,8 @@
           httpConfig.method = method;
 
           httpConfig = setPayload(httpConfig,payload);
-          return $http(httpConfig);
+          self.$request = $http(httpConfig);
+          return self.$request;
         }
       }
 
@@ -98,7 +101,7 @@
           delete data[prop];
       }
       delete data._id;
-      delete data.$promise;
+      delete data.$request;
       delete data.$resolved;
       return data;
     };
