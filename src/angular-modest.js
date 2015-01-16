@@ -10,7 +10,7 @@
   modest.factory('Resource',['$http','ResourceHelpers',function($http,ResourceHelpers){
     var Resource = function(url,defaultParams,parent){
       var self = this;
-      self.id = Math.random()*1000;
+      self._id = Math.random()*1000;
       var _parent = parent;
       var _defaultParams = defaultParams || {};
       var _url = url;
@@ -44,7 +44,7 @@
         var resources = _resourceUrl.match(/:[^\d|^\/]+/gi);
         if( nestedResourceMatches ){
           var nestedResource = nestedResourceMatches[1];
-          if( self instanceof NestedResource ){ // TODO: use parent.id instead?
+          if( self instanceof NestedResource ){ // TODO: use parent._id instead?
             return;
           }
           self[nestedResource] = new NestedResource(_resourceUrl,defaultParams,self);
@@ -88,8 +88,22 @@
       function mergeParams(params){
         return angular.extend(params || {},_defaultParams);
       }
-
     };
+
+
+    Resource.prototype.toJSON = function() {
+      var data = angular.extend({}, this);
+      for(var prop in data){
+        if( typeof this[prop] === 'function' )
+          delete data[prop];
+      }
+      delete data._id;
+      delete data.$promise;
+      delete data.$resolved;
+      return data;
+    };
+
+
 
     var NestedResource = function(){ Resource.apply(this,arguments); };
 
