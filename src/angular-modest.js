@@ -10,6 +10,8 @@
   modest.factory('Resource',['$http','ResourceHelpers',function($http,ResourceHelpers){
     var Resource = function(url,defaultParams,parent){
       var self = this;
+      var _resourceData = {};
+      var _resourcePropertiesNames = [];
       var _parent = parent;
       var _defaultParams = defaultParams || {};
       var _url = url;
@@ -25,7 +27,6 @@
       populateNestedResource(_defaultParams);
 
       ['get','post','put','delete','head','patch'].forEach(createRequestMethodFor);
-
 
 
       /* PUBLIC */
@@ -66,7 +67,33 @@
 
           httpConfig = setPayload(httpConfig,payload);
           self.$request = $http(httpConfig);
+          if( method.match(/get/i) ){
+            self.$request.then(function(data){
+              if( (data.status).toString().match(/2\d+/) ){
+                replaceResourceProperties(data.data);
+              }
+            });
+          }
           return self.$request;
+        }
+      }
+
+      function replaceResourceProperties(properties){
+        deleteResourceProperties();
+        setResourceProperties(properties);
+      }
+
+      function deleteResourceProperties(){
+        _resourcePropertiesNames.forEach(function(prop){
+          delete self[prop];
+        });
+        _resourcePropertiesNames.length = 0;
+      }
+
+      function setResourceProperties(properties){
+        for(var prop in properties){
+          self[prop] = properties[prop]
+          _resourcePropertiesNames.push(prop);
         }
       }
 

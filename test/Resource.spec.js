@@ -191,6 +191,20 @@ describe('Resource', function() {
     });
   });
 
+  describe('resource properties ', function () {
+    it('should expose resource properties to the instance', function(done){
+      var user = new Resource( '/users/:userId/books/:bookId',{});
+      $httpBackend.expectGET( /\/users\/1\/?$/ ).respond(200,dummyUser)
+      user.get({userId:1}).then(function(){
+        for(var prop in dummyUser){
+          expect( user ).to.have.property( prop );
+        }
+        done();
+      })
+      $httpBackend.flush();
+    });
+  });
+
   describe('edge-cases', function () {
     it('should ignore parameters not present in the url', function () {
       $httpBackend.expectGET( /\/users\/?$/ ).respond(200,dummyUser)
