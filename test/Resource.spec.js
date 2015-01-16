@@ -203,6 +203,16 @@ describe('Resource', function() {
       })
       $httpBackend.flush();
     });
+
+    it('should create a JSON representation of the resource', function(done){
+      var user = new Resource( '/users/:userId/books/:bookId',{});
+      $httpBackend.expectGET( /\/users\/1\/?$/ ).respond(200,dummyUser)
+      user.get({userId:1}).then(function(){
+        expect( JSON.parse(JSON.stringify(user)) ).to.deep.equal(dummyUser);
+        done();
+      })
+      $httpBackend.flush();      
+    });
   });
 
   describe('edge-cases', function () {
